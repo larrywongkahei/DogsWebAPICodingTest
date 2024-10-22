@@ -11,7 +11,7 @@
 
 ## Stack
 - Frontend ReactJS
-- Backend Nodejs
+- Backend Nodejs with Express
 - Development tool Docker
 - Operation System Linux (VM)
 - Hosting Platform Oracle
