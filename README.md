@@ -1,5 +1,7 @@
 # DogsWebAPICodingTest
 
+Please Note, the project is still using http which means its not secured.Please do not use any personal password when testing.
+
 ## MVP
 1. Create, Update, Read and Delete dogs
 2. Interaction must persist
