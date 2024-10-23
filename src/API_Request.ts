@@ -3,11 +3,13 @@ import axios from "axios"
 type ReturnDataType = {
     success: boolean;
     description: string;
+    data?: any;
 }
 
 type ResponseDataType = {
     success: boolean;
     description: string;
+    data?: any;
 }
 const API_Request = {
     GET: async (url:string) :Promise<ReturnDataType> => {
@@ -22,14 +24,15 @@ const API_Request = {
                 withCredentials: true
             })
 
-            const { success, description }:ResponseDataType = response.data;
+            const { success, description, data }:ResponseDataType = response.data;
             
             dataToResponse.success = success;
             dataToResponse.description = description;
+            dataToResponse.data = data
 
             return dataToResponse;
         }catch(error:unknown){
-            dataToResponse.description = "Something wrong when getting data, please try again later";
+            dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
     },
@@ -52,7 +55,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:any){
-            dataToResponse.description = "Something wrong when updating, please try again later";
+            dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
     },
@@ -75,7 +78,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:unknown){
-            dataToResponse.description = "Something is wrong, please try again later";
+            dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
     },
@@ -98,7 +101,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:unknown){
-            dataToResponse.description = "Something is wrong when deleting, please try again later";
+            dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
     },
