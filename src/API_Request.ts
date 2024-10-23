@@ -36,7 +36,7 @@ const API_Request = {
             return dataToResponse;
         }
     },
-    PUT: async <T>(url:string, body:T) :Promise<ReturnDataType> => {
+    PATCH: async <T>(url:string, body:T) :Promise<ReturnDataType> => {
 
         let dataToResponse: ReturnDataType = {
             success: false,
@@ -44,7 +44,7 @@ const API_Request = {
         }
 
         try{
-            const response = await axios.put(url, body, {
+            const response = await axios.patch(url, body, {
                 withCredentials: true
             })
 
