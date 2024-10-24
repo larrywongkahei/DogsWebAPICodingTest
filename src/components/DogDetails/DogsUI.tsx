@@ -19,6 +19,7 @@ export default function DogsUI() {
 
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [filters, setFilters] = useState<string[]>([]);
+    const [startWithFilter, setStartWithFilter] = useState<string>("");
     const [dogs, setDogs] = useState<Dog[]>([]);
     const [filteredDogs, setFilteredDogs] = useState<Dog[]>([]);
 
@@ -34,24 +35,47 @@ export default function DogsUI() {
         setDogs(data.data);
         setFilteredDogs(data.data);
     }
-
-    function filterDogs(filters: string[]){
-        if(filters.length == 0){
-            setFilteredDogs([...dogs]);
-            return;
-        }
-        const shadowDogsList = [...dogs];
-        const filteredDogList = shadowDogsList.filter((dog:Dog) => filters.some((filter: string) => dog.name.toLowerCase().includes(filter.toLowerCase())));
-        setFilteredDogs(filteredDogList);
-    }
-
+    
     function addToFilters(newFilter: string){
         const shadowFilters = [...filters];
         shadowFilters.push(newFilter);
         setFilters(shadowFilters);
         setPageIndex(1);
-        filterDogs(shadowFilters);
+        applyFilters(startWithFilter, shadowFilters);
     }
+
+    function addToStartWithFilter(initial: string){
+        let processedData = "";
+
+        if(startWithFilter !== initial){
+            processedData = initial;
+        }
+        
+        applyFilters(processedData, filters);
+        setStartWithFilter(processedData);
+    }
+
+    function applyFilters(initial: string, filters: string[]){
+        const shadowDogsList = [...dogs];
+
+        let firstLayerFilteredList: Dog[] = [];
+
+        if(filters.length > 0){
+            firstLayerFilteredList = shadowDogsList.filter((dog:Dog) => filters.every((filter: string) => dog.name.toLowerCase().includes(filter.toLowerCase())));
+        }else{
+            firstLayerFilteredList = [...dogs];
+        }
+
+        // If StartWithFilter not empty, apply
+        if(initial !== ""){
+            const secondLayerFilteredList = firstLayerFilteredList.filter((dog: Dog) => dog.name.toLowerCase().startsWith(initial.toLowerCase()));
+            setFilteredDogs(secondLayerFilteredList);
+            return;
+        }
+        // Else only apply first layer
+        setFilteredDogs(firstLayerFilteredList);
+    }
+
 
     function removeFilter(filterToRemove: string){
         const shadowFilters = [...filters];
@@ -64,7 +88,7 @@ export default function DogsUI() {
 
         shadowFilters.splice(itemIndex, 1);
         setFilters(shadowFilters);
-        filterDogs(shadowFilters);
+        applyFilters(startWithFilter, shadowFilters);
         setPageIndex(1);
 
         toast.success(`Successfully removed ${filterToRemove} .`)
@@ -78,9 +102,9 @@ export default function DogsUI() {
                 <SearchAndFilters addToFilters={addToFilters}/>
                 <FilterIndicator filters={filters} removeFilter={removeFilter}/>
                 <div className="my-3">
-                    <Alphabets updateFilterAlphabet={addToFilters} />
+                    <Alphabets updateFilterAlphabet={addToStartWithFilter} startWithFilterInitial={startWithFilter}/>
                 </div>
-                <DogBlockList dogs={filteredDogs} updateDogsState={setDogs} pageIndex={pageIndex} />
+                <DogBlockList dogs={filteredDogs} updateDogsState={setFilteredDogs} pageIndex={pageIndex} />
                 <Pagination pageCount={Math.ceil(filteredDogs?.length / 16)} onPageChange={(value) => {setPageIndex(value + 1)}}/>
         </div>
 
