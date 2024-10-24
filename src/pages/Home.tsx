@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import API_Request from '../API_Request';
 import axios from 'axios';
 import DogsUI from '../components/DogDetails/DogsUI';
+import CreateModal from '../components/CreateModal';
 
 type Dog = {
     name: string;
@@ -12,6 +13,7 @@ export default function Home() {
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [file, setFiles] = useState();
+    const [showModal, setShowModal] = useState(false);
 
 
     async function fileupload(e: any) {
@@ -72,6 +74,10 @@ export default function Home() {
         </form> */}
 
             <div className='w-full'>
+                <button onClick={() => {setShowModal(!showModal)}}>
+                    Create
+                </button>
+                {showModal && <CreateModal cancel={() => setShowModal(!showModal)}/>}
                 <DogsUI />
             </div>
         </div>
