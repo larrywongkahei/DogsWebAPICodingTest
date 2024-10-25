@@ -1,6 +1,4 @@
 import './App.css';
-import { useEffect } from 'react';
-import API_Request from './API_Request';
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,16 +9,19 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 
 function App(): JSX.Element {
-  useEffect(() => {
-    async function checkAuth(){
-      const data = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/authCheck`);
-      console.log(data);
-    }
+  // useEffect(() => {
+  //   async function checkAuth(){
+  //     const { success } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/authCheck`);
+  //     if(!success){
+  //       // Direct to login page
+  //       toast.error("No token or expired. Please login first. Rediecting to login page...")
+  //     }
+  //   }
 
-    checkAuth();
+  //   checkAuth();
 
 
-  }, [])
+  // }, [])
 
   return (
     <Router>

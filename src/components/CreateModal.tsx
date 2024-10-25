@@ -10,6 +10,7 @@ type Props = {
 export default function CreateModal({ cancel }: Props) {
     const [mainBreed, setMainBreed] = useState<string>('');
     const [subBreed, setSubBreed] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
     const [verified, setVerified] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [imagePath, setimagePath] = useState<string>('');
@@ -69,19 +70,16 @@ export default function CreateModal({ cancel }: Props) {
         if (!verified) {
             setErrorMessage("Please verify dog breed.");
         }
-        // Your logic for confirming
         console.log("Confirmed with Main Breed:", mainBreed, "Sub Breed:", subBreed);
-        //   setShowModal(false);
+        cancel();
     };
 
     return (
         <>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                <div className={`bg-white rounded-lg shadow-lg ${(verified && imagePath) ? "w-1/3 h-2/3" : "w-96"} p-6 relative`}>
-                    {/* Modal Header */}
+                <div className={`bg-white rounded-lg shadow-lg overflow-scroll ${(verified && imagePath) ? "w-1/3 h-5/6" : "w-96"} p-6 relative`}>
                     <h2 className="text-2xl font-semibold mb-4">Select Dog Breed</h2>
 
-                    {/* Main Breed Section */}
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Main Breed</label>
                         <input
@@ -94,7 +92,6 @@ export default function CreateModal({ cancel }: Props) {
                         />
                     </div>
 
-                    {/* Sub Breed Section */}
                     <div className="mb-6">
                         <label className="block text-gray-700 mb-2">Sub Breed</label>
                         <input
@@ -107,7 +104,18 @@ export default function CreateModal({ cancel }: Props) {
                         />
                     </div>
 
-                    {/* Error message container */}
+                    <div className="mb-6">
+                        <label className="block text-gray-700 mb-2">Description</label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            rows={5}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                            placeholder="Enter description"
+                            
+                        />
+                    </div>
+
                     {!verified &&
                         <div className="h-12 w-full">
                             <p className="text-red-500 text-lg font-mono text-center">
@@ -125,7 +133,6 @@ export default function CreateModal({ cancel }: Props) {
                         </div>
                     }
 
-                    {/* Buttons at the bottom */}
                     <div className="flex justify-center space-x-2 mt-6">
                         <button
                             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"

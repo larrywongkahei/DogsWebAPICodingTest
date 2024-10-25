@@ -1,25 +1,28 @@
 import { useState } from "react";
+import { FaPlus } from "react-icons/fa6";
+import ModalButton from "./ModalButton";
 
 type Props = {
-    addToFilters: (filter: string) => void;
+  addToFilters: (filter: string) => void;
+  toggleModal: () => void;
 }
 
-export default function SearchAndFilters({addToFilters}: Props){
+export default function SearchAndFilters({ addToFilters, toggleModal }: Props) {
 
-    const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>("");
 
-    function handleSubmit(e:any){
-        e.preventDefault();
-        addToFilters(value);
-        setValue("");
-    }
+  function handleSubmit(e: any) {
+    e.preventDefault();
+    addToFilters(value);
+    setValue("");
+  }
 
-    function handleOnChange(e:any){
-        setValue(e.target.value);
-    }
+  function handleOnChange(e: any) {
+    setValue(e.target.value);
+  }
 
-    return (
-        <form onSubmit={handleSubmit} className="flex items-center w-4/5 mx-auto">
+  return (
+      <form onSubmit={handleSubmit} className="flex items-center w-4/5 mx-auto">
         <input
           type="text"
           value={value}
@@ -29,10 +32,11 @@ export default function SearchAndFilters({addToFilters}: Props){
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white rounded-r-md px-4 py-2.5 hover:bg-blue-600 transition duration-200"
+          className="bg-blue-500 text-white rounded-r-md px-4 py-2.5 mr-4 hover:bg-blue-600 transition duration-200"
         >
           Search
         </button>
+        <ModalButton toggleModal={toggleModal} bgColor="blue" buttonText={<FaPlus />} />
       </form>
-    )
+  )
 }

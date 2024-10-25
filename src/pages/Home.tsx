@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import API_Request from '../API_Request';
 import axios from 'axios';
 import DogsUI from '../components/DogDetails/DogsUI';
@@ -11,7 +11,6 @@ type Dog = {
 }
 export default function Home() {
 
-    const [errorMessage, setErrorMessage] = useState<string>("");
     const [file, setFiles] = useState();
     const [showModal, setShowModal] = useState(false);
 
@@ -38,9 +37,7 @@ export default function Home() {
             },
         )
         if (!data.success) {
-            setErrorMessage(data.description);
         }
-        console.log(data);
     }
     async function register() {
         const data = await API_Request.POST(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/register`,
@@ -50,9 +47,7 @@ export default function Home() {
             },
         )
         if (!data.success) {
-            setErrorMessage(data.description);
         }
-        console.log(data);
     }
 
     return (
@@ -74,10 +69,6 @@ export default function Home() {
         </form> */}
 
             <div className='w-full'>
-                <button onClick={() => {setShowModal(!showModal)}}>
-                    Create
-                </button>
-                {showModal && <CreateModal cancel={() => setShowModal(!showModal)}/>}
                 <DogsUI />
             </div>
         </div>

@@ -7,6 +7,7 @@ import FilterIndicator from "../FilterIndicators";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import API_Request from "../../API_Request";
+import CreateModal from "../CreateModal";
 
 
 type Dog = {
@@ -22,10 +23,15 @@ export default function DogsUI() {
     const [startWithFilter, setStartWithFilter] = useState<string>("");
     const [dogs, setDogs] = useState<Dog[]>([]);
     const [filteredDogs, setFilteredDogs] = useState<Dog[]>([]);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
         get()
     }, [])
+
+    function toggleModal() {
+        setModalOpen(!modalOpen);
+    }
 
     async function get() {
         const data = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
@@ -96,11 +102,12 @@ export default function DogsUI() {
     }
 
     return (
-        <div className=" w-screen h-screen">
+        <div className=" w-screen h-screen flex flex-col">
             <ToastContainer
                 autoClose={1500}
             />
-            <SearchAndFilters addToFilters={addToFilters} />
+            <SearchAndFilters addToFilters={addToFilters} toggleModal={toggleModal} />
+            {modalOpen && <CreateModal cancel={toggleModal}/>}
             <FilterIndicator filters={filters} removeFilter={removeFilter} />
             <div className="my-3">
                 <Alphabets updateFilterAlphabet={addToStartWithFilter} startWithFilterInitial={startWithFilter} />
