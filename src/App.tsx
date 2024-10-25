@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import API_Request from './API_Request';
 import {
   BrowserRouter as Router,

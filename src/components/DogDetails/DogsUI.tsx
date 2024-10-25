@@ -31,12 +31,13 @@ export default function DogsUI() {
         const data = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
         if (!data.success) {
             toast.error(data.description);
+        } else {
+            setDogs(data.data);
+            setFilteredDogs(data.data);
         }
-        setDogs(data.data);
-        setFilteredDogs(data.data);
     }
-    
-    function addToFilters(newFilter: string){
+
+    function addToFilters(newFilter: string) {
         const shadowFilters = [...filters];
         shadowFilters.push(newFilter);
         setFilters(shadowFilters);
@@ -44,30 +45,30 @@ export default function DogsUI() {
         applyFilters(startWithFilter, shadowFilters);
     }
 
-    function addToStartWithFilter(initial: string){
+    function addToStartWithFilter(initial: string) {
         let processedData = "";
 
-        if(startWithFilter !== initial){
+        if (startWithFilter !== initial) {
             processedData = initial;
         }
-        
+
         applyFilters(processedData, filters);
         setStartWithFilter(processedData);
     }
 
-    function applyFilters(initial: string, filters: string[]){
+    function applyFilters(initial: string, filters: string[]) {
         const shadowDogsList = [...dogs];
 
         let firstLayerFilteredList: Dog[] = [];
 
-        if(filters.length > 0){
-            firstLayerFilteredList = shadowDogsList.filter((dog:Dog) => filters.every((filter: string) => dog.name.toLowerCase().includes(filter.toLowerCase())));
-        }else{
+        if (filters.length > 0) {
+            firstLayerFilteredList = shadowDogsList.filter((dog: Dog) => filters.every((filter: string) => dog.name.toLowerCase().includes(filter.toLowerCase())));
+        } else {
             firstLayerFilteredList = [...dogs];
         }
 
         // If StartWithFilter not empty, apply
-        if(initial !== ""){
+        if (initial !== "") {
             const secondLayerFilteredList = firstLayerFilteredList.filter((dog: Dog) => dog.name.toLowerCase().startsWith(initial.toLowerCase()));
             setFilteredDogs(secondLayerFilteredList);
             return;
@@ -77,11 +78,11 @@ export default function DogsUI() {
     }
 
 
-    function removeFilter(filterToRemove: string){
+    function removeFilter(filterToRemove: string) {
         const shadowFilters = [...filters];
         const itemIndex = shadowFilters.findIndex((value: string) => filterToRemove === value);
 
-        if(itemIndex === -1){
+        if (itemIndex === -1) {
             toast.error("Remove filter error, Please try again.")
             return;
         }
@@ -96,16 +97,18 @@ export default function DogsUI() {
 
     return (
         <div className=" w-screen h-screen">
-                <ToastContainer 
-                    autoClose={1500}
-                />
-                <SearchAndFilters addToFilters={addToFilters}/>
-                <FilterIndicator filters={filters} removeFilter={removeFilter}/>
-                <div className="my-3">
-                    <Alphabets updateFilterAlphabet={addToStartWithFilter} startWithFilterInitial={startWithFilter}/>
-                </div>
-                <DogBlockList dogs={filteredDogs} updateDogsState={setFilteredDogs} pageIndex={pageIndex} />
-                <Pagination pageCount={Math.ceil(filteredDogs?.length / 16)} onPageChange={(value) => {setPageIndex(value + 1)}}/>
+            <ToastContainer
+                autoClose={1500}
+            />
+            <SearchAndFilters addToFilters={addToFilters} />
+            <FilterIndicator filters={filters} removeFilter={removeFilter} />
+            <div className="my-3">
+                <Alphabets updateFilterAlphabet={addToStartWithFilter} startWithFilterInitial={startWithFilter} />
+            </div>
+            <DogBlockList dogs={filteredDogs} updateDogsState={setFilteredDogs} pageIndex={pageIndex} />
+            {filteredDogs.length > 0 &&
+                <Pagination pageCount={Math.ceil(filteredDogs?.length / 16)} onPageChange={(value) => { setPageIndex(value + 1) }} />
+            }
         </div>
 
     )
