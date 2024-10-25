@@ -7,7 +7,7 @@ type Props = {
   toggleModal: () => void;
 }
 
-export default function SearchAndFilters({ addToFilters, toggleModal }: Props) {
+export default function SearchAndFilters({ addToFilters, toggleModal }: Props):JSX.Element {
 
   const [value, setValue] = useState<string>("");
 

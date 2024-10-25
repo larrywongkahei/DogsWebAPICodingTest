@@ -7,7 +7,7 @@ type Props = {
     cancel: () => void;
 }
 
-export default function CreateModal({ cancel }: Props) {
+export default function CreateModal({ cancel }: Props):JSX.Element {
     const [mainBreed, setMainBreed] = useState<string>('');
     const [subBreed, setSubBreed] = useState<string>('');
     const [description, setDescription] = useState<string>('');

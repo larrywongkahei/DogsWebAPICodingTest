@@ -5,9 +5,8 @@ type Props = {
     onPageChange: (newPageIndex: number) => void;
 }
 
-export default function Pagination({ pageCount, onPageChange }: Props) {
+export default function Pagination({ pageCount, onPageChange }: Props):JSX.Element {
     function handlePageClick(event:any){
-        console.log(event.selected);
         onPageChange(event.selected)
     }
     return (

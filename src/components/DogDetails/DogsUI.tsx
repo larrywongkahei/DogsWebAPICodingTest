@@ -16,7 +16,7 @@ type Dog = {
     sub_breed: any;
 }
 
-export default function DogsUI() {
+export default function DogsUI():JSX.Element {
 
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [filters, setFilters] = useState<string[]>([]);

@@ -2,14 +2,8 @@ import { useState } from 'react';
 import API_Request from '../API_Request';
 import axios from 'axios';
 import DogsUI from '../components/DogDetails/DogsUI';
-import CreateModal from '../components/CreateModal';
 
-type Dog = {
-    name: string;
-    imagePath: string;
-    sub_breed: any;
-}
-export default function Home() {
+export default function Home():JSX.Element {
 
     const [file, setFiles] = useState();
     const [showModal, setShowModal] = useState(false);

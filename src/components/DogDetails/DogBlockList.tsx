@@ -14,7 +14,7 @@ type Props = {
     updateDogsState: (dogs: Dog[]) => void;
 }
 
-export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props) {
+export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props):JSX.Element {
 
     async function fetchAndUpdateImage(dogName: string) {
         const formattedDogName = dogName.split("-");

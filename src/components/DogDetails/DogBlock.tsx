@@ -12,7 +12,7 @@ type Props = {
 
 }
 
-export default function DogBlock({ dog, fetchAndUpdateImage }: Props) {
+export default function DogBlock({ dog, fetchAndUpdateImage }: Props):JSX.Element {
     return (
         <div className="flex flex-col h-40 w-40 bg-cyan-300 rounded-md justify-center mx-auto">
             <div className="h-5/6 w-full overflow-hidden">

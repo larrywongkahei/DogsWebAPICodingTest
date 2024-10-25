@@ -5,7 +5,7 @@ type Props = {
     removeFilter: (filter: string) => void;
 }
 
-export default function FilterIndicator({ filters, removeFilter }: Props) {
+export default function FilterIndicator({ filters, removeFilter }: Props):JSX.Element {
     return (
         <div className="flex w-4/5 justify-center mt-3 gap-2">
             {

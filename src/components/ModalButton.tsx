@@ -7,7 +7,7 @@ type Props = {
     bgColor: "blue" | "red" | "green";
 }
 
-export default function ModalButton({ toggleModal, buttonText, bgColor="blue" }: Props) {
+export default function ModalButton({ toggleModal, buttonText, bgColor="blue" }: Props):JSX.Element {
     const colorStyles = {
         blue: 'bg-blue-500 hover:bg-blue-700 text-white',
         red: 'bg-red-500 hover:bg-red-700 text-white',
