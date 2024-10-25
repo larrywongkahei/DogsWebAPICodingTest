@@ -32,6 +32,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:unknown){
+            console.log(error);
             dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
@@ -78,7 +79,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:unknown){
-            dataToResponse.description = error.response.data.description;
+            dataToResponse.description = error?.response.data?.description;
             return dataToResponse;
         }
     },

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import API_Request from "../../API_Request";
 import CreateModal from "../CreateModal";
+import { useNavigate } from "react-router-dom";
 
 
 type Dog = {
@@ -24,6 +25,7 @@ export default function DogsUI():JSX.Element {
     const [dogs, setDogs] = useState<Dog[]>([]);
     const [filteredDogs, setFilteredDogs] = useState<Dog[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const navigator = useNavigate();
 
     useEffect(() => {
         get()
@@ -37,6 +39,9 @@ export default function DogsUI():JSX.Element {
         const data = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
         if (!data.success) {
             toast.error(data.description);
+            toast.error("Redirecting to login page...", {
+                onClose: () => navigator("/Login", {replace: true})
+            });
         } else {
             setDogs(data.data);
             setFilteredDogs(data.data);
