@@ -1,53 +1,57 @@
 import { ReactElement, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useDogAPI from "../components/Hooks/useDogAPI";
 import { TSubBreed } from "../DogType";
-import { toast } from "react-toastify";
+import { RxReload } from "react-icons/rx";
 
 export default function DogProfile(): ReactElement {
 
   const location = useLocation();
-  const { dogName, subBreed, imagePath, description } = location.state || {};
+  const { name, sub_breed, imagePath, description } = location.state || {};
   const [newDescription, setNewDescription] = useState<string>(description);
-    const navigator = useNavigate();
 
-  const { Delete } = useDogAPI();
+  const { Delete, Update } = useDogAPI();
 
-  function handleUpdateClick() {
-    Delete(dogName);
+  async function handleUpdateClick() {
+    await Update({
+      name,
+      sub_breed,
+      imagePath,
+      description: newDescription,
+    })
+    // const { success } = await Update(dogName);
+    // if (success) {
+    //   return toast.success("Successfully Updated! Redirecting to home page.", {
+    //     onClose: () => { navigator("/", { replace: true }) }
+    //   });
+    // }
   }
 
   async function handleDeleteClick() {
-            const { success } = await Delete(dogName);
-            if(success){
-                return toast.success("Successfully Deleted! Redirecting to home page.", {
-                    onClose: () => {navigator("/", {replace: true})}
-                });
-            }
-            return toast.error("Deletion failed. Please report this problem.")
+    await Delete(name);
   }
 
   return (
     location.state ?
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md w-2/3">
-          <h1 className="text-2xl font-bold text-center mb-4">{dogName}</h1>
+          <h1 className="text-2xl font-bold text-center mb-4">{name}</h1>
           <img
             src={imagePath}
-            alt={dogName}
+            alt={name}
             className="w-full h-64 object-cover rounded-md mb-4"
           />
           <textarea className="text-gray-700 mb-4 resize-none border rounded-md p-2 border-gray-300 w-full" placeholder="Description" rows={7} value={newDescription} onChange={(e) => { setNewDescription(e.target.value) }} />
 
-          {subBreed.length > 0 && (
+          {sub_breed.length > 0 && (
             <div className="mb-4">
               <h2 className="text-xl font-semibold mb-2">Sub Breeds:</h2>
               <div className="grid grid-cols-2 gap-4">
-                {subBreed.map((sub: TSubBreed) => (
-                  <Link to={`/dog_profile/Sub_breedOf/${dogName}`} state={
+                {sub_breed.map((sub: TSubBreed) => (
+                  <div key={sub.name} className="border rounded-md p-2 relative">
+                  <Link to={`/dog_profile/Sub_breedOf/${name}`} state={
                     {
-                      dogName: sub.name,
-                      subBreed: [], 
+                      name: sub.name,
                       imagePath: sub.imagePath,
                       description: sub.description
                     }
@@ -59,6 +63,14 @@ export default function DogProfile(): ReactElement {
                       className="w-full h-32 object-cover rounded-md"
                     />
                   </Link>
+                  <button
+                      onClick={() => {}}
+                      className="absolute top-2 right-2 text-blue-500 hover:text-blue-700"
+                      title="Reload Image"
+                    >
+                      <RxReload size={24} />
+                      </button>
+                  </div>
                 ))}
               </div>
             </div>

@@ -1,43 +1,38 @@
 import { ReactElement, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import useDogAPI from "../components/Hooks/useDogAPI";
-import { toast } from "react-toastify";
 
 export default function SubBreedProfile(): ReactElement {
 
     const location = useLocation();
-    const { mainBreed } = useParams();
+    const { main_breed } = useParams();
 
-    const { dogName, imagePath, description } = location.state || {};
+    const { name, imagePath, description } = location.state || {};
     const [newDescription, setNewDescription] = useState<string>(description);
-    const navigator = useNavigate();
 
-    const { Delete } = useDogAPI();
+    const { Delete, Update } = useDogAPI();
 
-    function handleUpdateClick() {
-        Delete(dogName);
+    async function handleUpdateClick() {
+        await Update({
+        name,
+        main_breed,
+        imagePath,
+        description: newDescription,
+        })
     }
 
     async function handleDeleteClick() {
-        if (mainBreed) {
-            const { success } = await Delete(mainBreed, dogName);
-            if(success){
-                return toast.success("Successfully Deleted! Redirecting to home page", {
-                    onClose: () => {navigator("/", {replace: true})}
-                });
-            }
-            return toast.error("Deletion failed. Please report this problem.")
-        }
+        await Delete(main_breed!, name);
     }
 
     return (
-        (location.state && mainBreed) ?
+        (location.state && main_breed) ?
             <div className="flex items-center justify-center min-h-screen bg-gray-100">
                 <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md w-2/3">
-                    <h1 className="text-2xl font-bold text-center mb-4">{dogName}</h1>
+                    <h1 className="text-2xl font-bold text-center mb-4">{name}</h1>
                     <img
                         src={imagePath}
-                        alt={dogName}
+                        alt={name}
                         className="w-full h-64 object-cover rounded-md mb-4"
                     />
                     <textarea className="text-gray-700 mb-4 resize-none border rounded-md p-2 border-gray-300 w-full" placeholder="Description" rows={7} value={newDescription} onChange={(e) => { setNewDescription(e.target.value) }} />

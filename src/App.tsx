@@ -33,7 +33,7 @@ function App(): JSX.Element {
         <Route path='/Register' element={<Register />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/dog_profile' element={<DogProfile />} />
-        <Route path='/dog_profile/Sub_breedOf/:mainBreed' element={<SubBreedProfile />} />
+        <Route path='/dog_profile/Sub_breedOf/:main_breed' element={<SubBreedProfile />} />
       </Routes>
       <ToastContainer autoClose={1500} />
     </Router>

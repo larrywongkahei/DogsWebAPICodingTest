@@ -10,41 +10,31 @@ type Props = {
 
 }
 
-export default function DogBlock({ dog, fetchAndUpdateImage, fetching }: Props):JSX.Element {
+export default function DogBlock({ dog, fetchAndUpdateImage, fetching }: Props): JSX.Element {
 
     return (
-        <div className="flex flex-col h-40 w-40 bg-cyan-300 rounded-md justify-center mx-auto">
+        <div className="flex flex-col h-48 w-48 bg-gradient-to-b from-cyan-300 to-blue-400 rounded-lg shadow-lg justify-center mx-auto hover:scale-105 transition-transform duration-200">
             <Link to={"/dog_profile"} state={{
-                dogName: dog.name,
-                subBreed: dog.sub_breed,
+                name: dog.name,
+                sub_breed: dog.sub_breed,
                 imagePath: dog.imagePath,
                 description: dog.description
-                }} className="h-5/6 w-full overflow-hidden">
-                <img src={dog.imagePath} className='object-cover h-full w-full rounded-md' />
+            }} className="h-5/6 w-full overflow-hidden rounded-t-lg">
+                <img src={dog.imagePath} className='object-cover h-full w-full rounded-t-lg transition-transform duration-300 hover:scale-110' />
             </Link>
-            <div className="relative">
-                <p className="text-center">
+            <div className="relative bg-white rounded-b-lg flex items-center justify-between p-2">
+                <p className="text-center text-gray-700 font-semibold">
                     {dog.name}
                 </p>
-                <button disabled={fetching} className="absolute right-2 bottom-1 rounded-lg cursor-pointer" onClick={() => fetchAndUpdateImage(dog.name)} >
-                    <RxReload />
+                <button
+                    disabled={fetching}
+                    className="text-cyan-600 hover:text-cyan-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={() => fetchAndUpdateImage(dog.name)}
+                    title="Reload Image"
+                >
+                    <RxReload size={20} />
                 </button>
             </div>
-            {/* {dog.sub_breed.length > 0 ?
-                <div>
-                    {dog.sub_breed.map((sub: Dog, subindex: number) => {
-                        return (
-                            <div key={subindex}>
-                                <p>
-                                    {sub.name}-{dog.name}
-                                </p>
-                                <img src={sub.imagePath} className='h-1/5 w-1/5' onClick={() => fetchAndUpdateImage(dog.name + "-" + sub.name)} />
-                            </div>
-
-                        )
-                    })}
-                </div> : <p>No sub breed</p>
-            } */}
         </div>
 
     )

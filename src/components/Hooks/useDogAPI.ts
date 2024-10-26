@@ -4,7 +4,7 @@ import { TDog } from "../../DogType";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export default function useDogAPI(){
+export default function useDogAPI() {
 
     const [dogs, setDogs] = useState<TDog[]>([]);
     const [error, setError] = useState<boolean>(false);
@@ -26,7 +26,39 @@ export default function useDogAPI(){
     //     }
     // }
 
-    async function Delete(mainBreed: string, subBreed: string = ""){
+    async function Update(dog: TDog) {
+
+        const { success, data, description, status } = await API_Request.PATCH(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/update`, dog);
+
+        if (status === 401) {
+            toast.error("Token Expired, Please login again. redirecting...", {
+                autoClose: 1000,
+                onClose: () => { navigator("/Login", { replace: true }) },
+            })
+        }
+
+        if (!success) {
+            // setError(true);
+            // setErrorMessage(description);        
+            return toast.error(description);
+        }
+
+        setDogs(data);
+        return toast.success("Successfully updated!", {
+            autoClose: 1000,
+            onClose: () => {
+                navigator("/", { replace: true })
+            }
+        }
+        )
+        // return {
+        //     success: success
+        // }
+
+
+    }
+
+    async function Delete(mainBreed: string, subBreed: string = "") {
         let urlPath = "";
 
         if (subBreed.length < 1) {
@@ -34,32 +66,32 @@ export default function useDogAPI(){
         } else {
             urlPath = `${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}`
         }
-        console.log('called')
 
         const { success, data, description, status } = await API_Request.DELETE(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/delete/${urlPath}`);
-        console.log(status)
 
-        if(status === 401){
+        if (status === 401) {
             toast.error("Token Expired, Please login again. redirecting...", {
-                onClose: () => {navigator("/Login", {replace: true})}
+            autoClose: 1000,
+                onClose: () => { navigator("/Login", { replace: true }) }
             })
         }
 
-        if(!success){
-            setError(true);
-            setErrorMessage(description);        
-            return {
-                success: false
-            }
+        if (!success) {
+            // setError(true);
+            // setErrorMessage(description);        
+            return toast.error(description);
         }
 
         setDogs(data);
-        return {
-            success: success
-        }
 
+        return toast.success("Successfully Deleted! Redirecting to home page.", {
+            autoClose: 1000,
+            onClose: () => {
+                navigator("/", { replace: true })
+            }
+        });
     }
 
-    return { dogs, error, errorMessage, Delete }
+    return { dogs, error, errorMessage, Delete, Update }
 }
 
