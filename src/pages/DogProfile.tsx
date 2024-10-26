@@ -6,11 +6,18 @@ import { RxReload } from "react-icons/rx";
 import useFetchImage from "../components/Hooks/useFetchImage";
 
 export default function DogProfile(): ReactElement {
-  let { main_breed_name } = useParams();
+  let { main_breed_name } = useParams<{main_breed_name:string}>();
+  if(!main_breed_name){
+    return (
+      <h1>
+          Loading
+      </h1>
+    )
+  }
   
   const { Delete, Update, main_breed, handleUpdateImage } = useDogAPI({ main_breed_name });
 
-  const [newDescription, setNewDescription] = useState<string>(main_breed?.description);
+  const [newDescription, setNewDescription] = useState<string>(main_breed?.description || "");
   const { fetchRandomImage } = useFetchImage();
 
 

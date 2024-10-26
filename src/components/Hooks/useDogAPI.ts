@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function useDogAPI({ main_breed_name }: { main_breed_name: string }) {
 
     const [dogs, setDogs] = useState<TDog[]>([]);
-    const [main_breed, setMain_breed] = useState<TDog>();
+    const [main_breed, setMain_breed] = useState<TDog>({} as TDog);
     const navigator = useNavigate();
 
     useEffect(() => {
