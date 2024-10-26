@@ -1,20 +1,18 @@
 import { ReactElement, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useDogAPI from "../components/Hooks/useDogAPI";
 import { TSubBreed } from "../DogType";
 import { RxReload } from "react-icons/rx";
 import useFetchImage from "../components/Hooks/useFetchImage";
-import API_Request from "../API_Request";
-import { toast } from "react-toastify";
 
 export default function DogProfile(): ReactElement {
   let { main_breed_name } = useParams();
-  const { Delete, Update, main_breed, GetMainBreedByName, handleUpdateImage } = useDogAPI({ main_breed_name });
+  
+  const { Delete, Update, main_breed, handleUpdateImage } = useDogAPI({ main_breed_name });
 
   const [newDescription, setNewDescription] = useState<string>(main_breed?.description);
   const { fetchRandomImage } = useFetchImage();
 
-  const navigator = useNavigate();
 
   async function handleUpdateImageButtonClick (sub_breed_name: string) {
     const newImagePath = await fetchRandomImage(main_breed_name, sub_breed_name);
@@ -29,12 +27,6 @@ export default function DogProfile(): ReactElement {
       imagePath: main_breed.imagePath,
       description: newDescription
     })
-    // const { success } = await Update(dogName);
-    // if (success) {
-    //   return toast.success("Successfully Updated! Redirecting to home page.", {
-    //     onClose: () => { navigator("/", { replace: true }) }
-    //   });
-    // }
   }
 
   async function handleDeleteClick() {

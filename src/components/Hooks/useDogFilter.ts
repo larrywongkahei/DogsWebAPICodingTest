@@ -1,12 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TDog } from "../../DogType";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import API_Request from "../../API_Request";
 
-export default function useDogFilter(dogs:TDog[]){
+export default function useDogFilter(){
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [filters, setFilters] = useState<string[]>([]);
     const [startWithFilter, setStartWithFilter] = useState<string>("");
+    const [dogs, setDogs] = useState<TDog[]>([]);
     const [filteredDogs, setFilteredDogs] = useState<TDog[]>([]);
+
+    const navigator = useNavigate();
+
+    useEffect(() => {
+        get();
+    }, [])
+
+    async function get() {
+        const { success, description, status, data } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
+
+        if(status === 401){
+            return toast.error("Token Expired, Please login again. redirecting...", {
+                onClose: () => {navigator("/Login", {replace: true})}
+            })
+        }
+        if (!success) {
+            toast.error(description);
+            toast.error("Redirecting to login page...", {
+                onClose: () => navigator("/Login", {replace: true})
+            });
+        } else {
+            setDogs(data);
+            setFilteredDogs(data);
+        }
+    }
 
     function addToFilters(newFilter: string) {
         const shadowFilters = [...filters];
