@@ -8,15 +8,14 @@ export default function Register(): JSX.Element {
 
   const [username, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const navigator = useNavigate()
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     const { success, description } = await API_Request.POST<{username:string, password:string}>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/register`,
       {
-        username: "testing1234",
-        password: "testingpassword"
+        username: username,
+        password: password
       },
     )
     if (!success) {
@@ -45,13 +44,6 @@ export default function Register(): JSX.Element {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-green-500"
-          />
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm Password"
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-green-500"
           />
           <button type="submit" className="w-full py-2 text-white bg-green-600 rounded-md hover:bg-green-700">

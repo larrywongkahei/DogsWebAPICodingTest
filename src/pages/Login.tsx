@@ -13,13 +13,12 @@ export default function Login(): JSX.Element {
         e.preventDefault();
         const { success, description } = await API_Request.POST(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/login`,
             {
-                username: "testing123",
-                password: "testingpassword"
+                username: username,
+                password: password,
             },
         )
         if (!success) {
             toast.error(description)
-            toast.error("Register if you do not have an account.")
         }else{
             toast.success("Successfully logged in, redirecting to home page...", {
                 onClose: () => navigator("/", {replace: true})

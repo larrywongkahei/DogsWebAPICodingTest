@@ -10,7 +10,7 @@ export default function SubBreedProfile(): ReactElement {
     const { name, imagePath, description } = location.state || {};
     const [newDescription, setNewDescription] = useState<string>(description);
 
-    const { Delete, Update } = useDogAPI();
+    const { Delete, Update } = useDogAPI({main_breed_name:main_breed});
 
     async function handleUpdateClick() {
         await Update({

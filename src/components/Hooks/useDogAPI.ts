@@ -4,14 +4,16 @@ import { TDog } from "../../DogType";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export default function useDogAPI({ main_breed_name }: { main_breed_name: string }) {
+export default function useDogAPI({ main_breed_name }:{main_breed_name:string}) {
 
     const [dogs, setDogs] = useState<TDog[]>([]);
     const [main_breed, setMain_breed] = useState<TDog>({} as TDog);
     const navigator = useNavigate();
 
     useEffect(() => {
-        GetMainBreedByName(main_breed_name)
+        if(main_breed){
+            GetMainBreedByName(main_breed_name)
+        }
 
     }, [])
 
@@ -46,7 +48,7 @@ export default function useDogAPI({ main_breed_name }: { main_breed_name: string
             )
 
         } catch (error) {
-            toast.error("Something is wrong, please try again later and report this problem.")
+            toast.error("Please slow down and try again later.")
         }
     }
 
@@ -62,7 +64,6 @@ export default function useDogAPI({ main_breed_name }: { main_breed_name: string
         if (!success) {
             return toast.error(description);
         }
-        console.log(data);
 
         setMain_breed(data);
     }

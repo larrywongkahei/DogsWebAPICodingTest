@@ -4,6 +4,7 @@ import useDogAPI from "../components/Hooks/useDogAPI";
 import { TSubBreed } from "../DogType";
 import { RxReload } from "react-icons/rx";
 import useFetchImage from "../components/Hooks/useFetchImage";
+import { toast } from "react-toastify";
 
 export default function DogProfile(): ReactElement {
   let { main_breed_name } = useParams<{main_breed_name:string}>();
@@ -22,6 +23,9 @@ export default function DogProfile(): ReactElement {
 
 
   async function handleUpdateImageButtonClick (sub_breed_name: string) {
+    if(!main_breed_name){
+      return toast.error("Something is wrong, please report this problem and try again later.")
+    }
     const newImagePath = await fetchRandomImage(main_breed_name, sub_breed_name);
     await handleUpdateImage(sub_breed_name, newImagePath);
 
@@ -48,11 +52,11 @@ export default function DogProfile(): ReactElement {
           <img
             src={main_breed.imagePath}
             alt={main_breed.name}
-            className="w-full h-64 object-cover rounded-md mb-4"
+            className="w-full h-72 object-cover rounded-md mb-4"
           />
           <textarea className="text-gray-700 mb-4 resize-none border rounded-md p-2 border-gray-300 w-full" placeholder="Description" rows={7} value={newDescription} defaultValue={main_breed.description} onChange={(e) => { setNewDescription(e.target.value) }} />
 
-          {main_breed.sub_breed!.length > 0 && (
+          {main_breed.sub_breed && main_breed.sub_breed?.length > 0 && (
             <div className="mb-4">
               <h2 className="text-xl font-semibold mb-2">Sub Breeds:</h2>
               <div className="grid grid-cols-2 gap-4">
@@ -69,7 +73,7 @@ export default function DogProfile(): ReactElement {
                       <img
                         src={sub.imagePath}
                         alt={sub.name}
-                        className="w-full h-32 object-cover rounded-md"
+                        className="w-full h-32 object-fill rounded-md"
                       />
                     </Link>
                     <button
