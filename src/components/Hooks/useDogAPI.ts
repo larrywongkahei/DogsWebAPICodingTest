@@ -3,28 +3,15 @@ import API_Request from "../../API_Request";
 import { TDog } from "../../DogType";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function useDogAPI() {
 
     const [dogs, setDogs] = useState<TDog[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [imagePath, setImagePath] = useState<string>('');
     const navigator = useNavigate();
-
-    // async function get() {
-    //     let dataToReturn = {
-    //     }
-    //     const data = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
-    //     if (!data.success) {
-    //         toast.error(data.description);
-    //         toast.error("Redirecting to login page...", {
-    //             onClose: () => navigator("/Login", {replace: true})
-    //         });
-    //     } else {
-    //         setDogs(data.data);
-    //         setFilteredDogs(data.data);
-    //     }
-    // }
 
     async function Update(dog: TDog) {
 

@@ -95,6 +95,8 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
             description
         });
 
+        setFetching(false);
+
 
         if(status === 401){
             toast.error("Token Expired, Please login again. redirecting...", {
@@ -104,13 +106,12 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
 
         if(success){
             return toast.success("Successfully Added! Redirecting to home page.", {
-                onClose: () => {navigator("/", {replace: true})}
+                onClose: () => {cancel()}
             });
         } else {
             toast.error(result_description);
         }
 
-        setFetching(false);
 
     };
 
