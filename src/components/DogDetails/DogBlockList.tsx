@@ -3,6 +3,8 @@ import API_Request from "../../API_Request";
 import DogBlock from "./DogBlock";
 import { TDog, TSubBreed } from "../../DogType";
 import { useState } from "react";
+import { toast } from "react-toastify";
+
 
 
 
@@ -12,7 +14,7 @@ type Props = {
     updateDogsState: (dogs: TDog[]) => void;
 }
 
-export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props):JSX.Element {
+export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props): JSX.Element {
     const [fetching, setFetching] = useState<boolean>(false);
 
     async function fetchAndUpdateImage(dogName: string) {
@@ -40,11 +42,12 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
                 updateDogsState(userDogs);
 
                 await API_Request.PATCH<{ imagePath: string }>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/image/${dogName}`, { imagePath: url })
+                toast.success("Successfully changed image")
 
             } catch (error) {
-                console.log('error show in subbreed')
+                toast.error("Failed fetching random image, Please report this problem.")
             }
-            
+
         }
 
         try {
@@ -52,7 +55,7 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
             const { message: url } = data;
 
             const userDogs = [...dogs];
-            const indexOfDog = userDogs.findIndex((dog:TDog) => dog.name === dogName);
+            const indexOfDog = userDogs.findIndex((dog: TDog) => dog.name === dogName);
 
             const dogToUpdate = userDogs[indexOfDog];
 
@@ -62,24 +65,27 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
             updateDogsState(userDogs);
 
             await API_Request.PATCH<{ imagePath: string }>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/image/${dogName}`, { imagePath: url })
+            toast.success("Successfully changed image")
         } catch (error) {
-            console.log('error main breed')
+            toast.error("Failed fetching random image, Please report this problem.")
         }
         return setFetching(false);
 
     }
 
     return (
-        <div className="grid grid-cols-4 gap-3">
-            {
-                dogs?.slice((pageIndex - 1) * 16, pageIndex * 16).map((each: TDog, index: number) => {
-                    return (
-                        <DogBlock dog={each} fetchAndUpdateImage={fetchAndUpdateImage} key={index} fetching={fetching}/>
-                    )
-                })
-            }
+        <>
+            <div className="grid grid-cols-4 gap-3">
+                {
+                    dogs?.slice((pageIndex - 1) * 16, pageIndex * 16).map((each: TDog, index: number) => {
+                        return (
+                            <DogBlock dog={each} fetchAndUpdateImage={fetchAndUpdateImage} key={index} fetching={fetching} />
+                        )
+                    })
+                }
 
-        </div>
+            </div>
+        </>
 
     )
 }

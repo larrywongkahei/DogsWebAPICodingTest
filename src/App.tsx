@@ -4,10 +4,11 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Login from './pages/Login';
 import Home from './pages/Home';
+import Login from './pages/Login';
 import Register from './pages/Register';
 import DogProfile from './pages/DogProfile';
+import { ToastContainer } from 'react-toastify';
 import SubBreedProfile from './pages/SubBreedProfile';
 
 function App(): JSX.Element {
@@ -34,6 +35,7 @@ function App(): JSX.Element {
         <Route path='/dog_profile' element={<DogProfile />} />
         <Route path='/dog_profile/Sub_breedOf/:mainBreed' element={<SubBreedProfile />} />
       </Routes>
+      <ToastContainer autoClose={1500} />
     </Router>
   )
 }

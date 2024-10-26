@@ -34,8 +34,10 @@ export default function useDogAPI(){
         } else {
             urlPath = `${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}`
         }
+        console.log('called')
 
         const { success, data, description, status } = await API_Request.DELETE(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/delete/${urlPath}`);
+        console.log(status)
 
         if(status === 401){
             toast.error("Token Expired, Please login again. redirecting...", {

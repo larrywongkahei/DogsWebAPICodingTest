@@ -36,6 +36,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:any){
+            dataToResponse.status = error.response.status;
             dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
@@ -62,6 +63,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:any){
+            dataToResponse.status = error.response.status;
             dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
@@ -88,6 +90,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:any){
+            dataToResponse.status = error.response.status;
             dataToResponse.description = error?.response.data?.description;
             return dataToResponse;
         }
@@ -114,6 +117,7 @@ const API_Request = {
 
             return dataToResponse;
         }catch(error:any){
+            dataToResponse.status = error.response.status;
             dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }

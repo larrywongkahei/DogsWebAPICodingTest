@@ -81,12 +81,37 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
         )
     }
 
-    function handleConfirm() {
+    async function handleConfirm() {
         if (!verified) {
             return toast.error("Please verify dog breed.");
         }
-        console.log("Confirmed with Main Breed:", mainBreed, "Sub Breed:", subBreed);
-        cancel();
+
+        setFetching(true);
+
+        const { success, description: result_description, status } = await API_Request.POST(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/create`, {
+            mainBreed:mainBreed.toLowerCase(),
+            subBreed: subBreed.toLowerCase(),
+            imagePath,
+            description
+        });
+
+
+        if(status === 401){
+            toast.error("Token Expired, Please login again. redirecting...", {
+                onClose: () => {navigator("/Login", {replace: true})}
+            })
+        }
+
+        if(success){
+            return toast.success("Successfully Added! Redirecting to home page.", {
+                onClose: () => {navigator("/", {replace: true})}
+            });
+        } else {
+            toast.error(result_description);
+        }
+
+        setFetching(false);
+
     };
 
     return (
@@ -94,7 +119,6 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
                 <div className={`bg-white rounded-lg shadow-lg overflow-scroll &::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${(verified && imagePath) ? "w-1/3 h-5/6" : "w-96"} p-6 relative`}>
                     <h2 className="text-2xl font-semibold mb-4">Select Dog Breed</h2>
-
                     <div className="mb-4">
                         <label className="block text-gray-700 mb-2">Main Breed</label>
                         <input

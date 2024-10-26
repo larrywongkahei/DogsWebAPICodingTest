@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API_Request from "../API_Request";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function Login(): JSX.Element {
 
@@ -29,7 +29,6 @@ export default function Login(): JSX.Element {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <ToastContainer autoClose={2000} />
             <div className="w-full max-w-md p-6 space-y-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-center text-gray-700">Login</h2>
                 <form className="space-y-4" onSubmit={handleLogin}>

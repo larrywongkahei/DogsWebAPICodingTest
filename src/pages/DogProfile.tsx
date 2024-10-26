@@ -2,7 +2,7 @@ import { ReactElement, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useDogAPI from "../components/Hooks/useDogAPI";
 import { TSubBreed } from "../DogType";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function DogProfile(): ReactElement {
 
@@ -30,7 +30,6 @@ export default function DogProfile(): ReactElement {
   return (
     location.state ?
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <ToastContainer autoClose={1500}/>
         <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md w-2/3">
           <h1 className="text-2xl font-bold text-center mb-4">{dogName}</h1>
           <img

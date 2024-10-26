@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useDogAPI from "../components/Hooks/useDogAPI";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function SubBreedProfile(): ReactElement {
 
@@ -33,7 +33,6 @@ export default function SubBreedProfile(): ReactElement {
     return (
         (location.state && mainBreed) ?
             <div className="flex items-center justify-center min-h-screen bg-gray-100">
-                <ToastContainer autoClose={1500}/>
                 <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md w-2/3">
                     <h1 className="text-2xl font-bold text-center mb-4">{dogName}</h1>
                     <img

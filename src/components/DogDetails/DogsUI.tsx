@@ -4,7 +4,7 @@ import SearchAndFilters from "../SearchAndFilters";
 import DogBlockList from "./DogBlockList"
 import Pagination from "../Pagination";
 import FilterIndicator from "../FilterIndicators";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import API_Request from "../../API_Request";
 import CreateModal from "../CreateModal";
@@ -108,9 +108,6 @@ export default function DogsUI():JSX.Element {
 
     return (
         <div className=" w-screen h-screen flex flex-col">
-            <ToastContainer
-                autoClose={1500}
-            />
             <SearchAndFilters addToFilters={addToFilters} toggleModal={toggleModal} />
             {modalOpen && <CreateModal cancel={toggleModal}/>}
             <FilterIndicator filters={filters} removeFilter={removeFilter} />
