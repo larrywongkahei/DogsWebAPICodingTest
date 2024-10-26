@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useFetchImage from "../Hooks/useFetchImage";
 import { updateImagePath } from "../helper";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -19,12 +20,29 @@ type Props = {
 export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props): JSX.Element {
     const [fetching, setFetching] = useState<boolean>(false);
     const { fetchRandomImage } = useFetchImage();
+    const navigator = useNavigate();
 
     async function fetchAndUpdateImage(dogName: string){
         const newImagePath = await fetchRandomImage(dogName);
         const data = updateImagePath(dogs, newImagePath, dogName);
         updateDogsState(data.data)
-                await API_Request.PATCH<{ imagePath: string }>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/image/${dogName}`, { imagePath: newImagePath })
+        const { success, description, status } = await API_Request.PATCH(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/image/${dogName}`, { imagePath:newImagePath});
+
+        if (status === 401) {
+            return toast.error("Token Expired, Please login again. redirecting...", {
+                autoClose: 1000,
+                onClose: () => { navigator("/Login", { replace: true }) },
+            })
+        }
+
+        if (!success) {
+            return toast.error(description);
+        }
+
+        return toast.success("Successfully updated!", {
+            autoClose: 1000,
+        }
+        )
     }
 
     // async function fetchAndUpdateImage(dogName: string) {

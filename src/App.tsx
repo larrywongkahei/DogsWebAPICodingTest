@@ -32,7 +32,7 @@ function App(): JSX.Element {
         <Route path='/' element={<Home />} />
         <Route path='/Register' element={<Register />} />
         <Route path='/Login' element={<Login />} />
-        <Route path='/dog_profile' element={<DogProfile />} />
+        <Route path='/dog_profile/:main_breed_name' element={<DogProfile />} />
         <Route path='/dog_profile/Sub_breedOf/:main_breed' element={<SubBreedProfile />} />
       </Routes>
       <ToastContainer autoClose={1500} />

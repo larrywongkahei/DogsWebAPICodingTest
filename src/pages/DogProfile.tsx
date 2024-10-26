@@ -1,23 +1,33 @@
 import { ReactElement, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useDogAPI from "../components/Hooks/useDogAPI";
 import { TSubBreed } from "../DogType";
 import { RxReload } from "react-icons/rx";
+import useFetchImage from "../components/Hooks/useFetchImage";
+import API_Request from "../API_Request";
+import { toast } from "react-toastify";
 
 export default function DogProfile(): ReactElement {
+  let { main_breed_name } = useParams();
+  const { Delete, Update, main_breed, GetMainBreedByName, handleUpdateImage } = useDogAPI({ main_breed_name });
 
-  const location = useLocation();
-  const { name, sub_breed, imagePath, description } = location.state || {};
-  const [newDescription, setNewDescription] = useState<string>(description);
+  const [newDescription, setNewDescription] = useState<string>(main_breed?.description);
+  const { fetchRandomImage } = useFetchImage();
 
-  const { Delete, Update } = useDogAPI();
+  const navigator = useNavigate();
+
+  async function handleUpdateImageButtonClick (sub_breed_name: string) {
+    const newImagePath = await fetchRandomImage(main_breed_name, sub_breed_name);
+    await handleUpdateImage(sub_breed_name, newImagePath);
+
+  }
 
   async function handleUpdateClick() {
     await Update({
-      name,
-      sub_breed,
-      imagePath,
-      description: newDescription,
+      name: main_breed.name,
+      sub_breed: main_breed.sub_breed,
+      imagePath: main_breed.imagePath,
+      description: newDescription
     })
     // const { success } = await Update(dogName);
     // if (success) {
@@ -28,48 +38,48 @@ export default function DogProfile(): ReactElement {
   }
 
   async function handleDeleteClick() {
-    await Delete(name);
+    await Delete(main_breed.name);
   }
 
   return (
-    location.state ?
+    main_breed ?
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md w-2/3">
-          <h1 className="text-2xl font-bold text-center mb-4">{name}</h1>
+          <h1 className="text-2xl font-bold text-center mb-4">{main_breed.name}</h1>
           <img
-            src={imagePath}
-            alt={name}
+            src={main_breed.imagePath}
+            alt={main_breed.name}
             className="w-full h-64 object-cover rounded-md mb-4"
           />
-          <textarea className="text-gray-700 mb-4 resize-none border rounded-md p-2 border-gray-300 w-full" placeholder="Description" rows={7} value={newDescription} onChange={(e) => { setNewDescription(e.target.value) }} />
+          <textarea className="text-gray-700 mb-4 resize-none border rounded-md p-2 border-gray-300 w-full" placeholder="Description" rows={7} value={newDescription} defaultValue={main_breed.description} onChange={(e) => { setNewDescription(e.target.value) }} />
 
-          {sub_breed.length > 0 && (
+          {main_breed.sub_breed!.length > 0 && (
             <div className="mb-4">
               <h2 className="text-xl font-semibold mb-2">Sub Breeds:</h2>
               <div className="grid grid-cols-2 gap-4">
-                {sub_breed.map((sub: TSubBreed) => (
+                {main_breed.sub_breed!.map((sub: TSubBreed) => (
                   <div key={sub.name} className="border rounded-md p-2 relative">
-                  <Link to={`/dog_profile/Sub_breedOf/${name}`} state={
-                    {
-                      name: sub.name,
-                      imagePath: sub.imagePath,
-                      description: sub.description
-                    }
-                  } key={sub.name} className="border rounded-md p-2">
-                    <h3 className="font-bold">{sub.name}</h3>
-                    <img
-                      src={sub.imagePath}
-                      alt={sub.name}
-                      className="w-full h-32 object-cover rounded-md"
-                    />
-                  </Link>
-                  <button
-                      onClick={() => {}}
+                    <Link to={`/dog_profile/Sub_breedOf/${main_breed.name}`} state={
+                      {
+                        name: sub.name,
+                        imagePath: sub.imagePath,
+                        description: sub.description
+                      }
+                    } key={sub.name} className="border rounded-md p-2">
+                      <h3 className="font-bold">{sub.name}</h3>
+                      <img
+                        src={sub.imagePath}
+                        alt={sub.name}
+                        className="w-full h-32 object-cover rounded-md"
+                      />
+                    </Link>
+                    <button
+                      onClick={() => { handleUpdateImageButtonClick(sub.name) }}
                       className="absolute top-2 right-2 text-blue-500 hover:text-blue-700"
                       title="Reload Image"
                     >
                       <RxReload size={24} />
-                      </button>
+                    </button>
                   </div>
                 ))}
               </div>

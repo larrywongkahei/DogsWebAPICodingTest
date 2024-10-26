@@ -33,7 +33,7 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
         const { success, description, data, status } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/verify/${path}`);
 
         if(status === 401){
-            toast.error("Token Expired, Please login again. redirecting...", {
+            return toast.error("Token Expired, Please login again. redirecting...", {
                 onClose: () => {navigator("/Login", {replace: true})}
             })
         }
@@ -99,7 +99,7 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
 
 
         if(status === 401){
-            toast.error("Token Expired, Please login again. redirecting...", {
+            return toast.error("Token Expired, Please login again. redirecting...", {
                 onClose: () => {navigator("/Login", {replace: true})}
             })
         }
