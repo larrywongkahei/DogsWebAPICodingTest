@@ -7,6 +7,8 @@ import {
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Register from './pages/Register';
+import DogProfile from './pages/DogProfile';
+import SubBreedProfile from './pages/SubBreedProfile';
 
 function App(): JSX.Element {
   // useEffect(() => {
@@ -29,6 +31,8 @@ function App(): JSX.Element {
         <Route path='/' element={<Home />} />
         <Route path='/Register' element={<Register />} />
         <Route path='/Login' element={<Login />} />
+        <Route path='/dog_profile' element={<DogProfile />} />
+        <Route path='/dog_profile/Sub_breedOf/:mainBreed' element={<SubBreedProfile />} />
       </Routes>
     </Router>
   )

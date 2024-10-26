@@ -1,26 +1,34 @@
 import { RxReload } from "react-icons/rx";
 import { TDog } from "../../DogType";
+import { Link } from "react-router-dom";
 
 
 type Props = {
     dog: TDog;
     fetchAndUpdateImage: (name: string) => void
+    fetching: boolean
 
 }
 
-export default function DogBlock({ dog, fetchAndUpdateImage }: Props):JSX.Element {
+export default function DogBlock({ dog, fetchAndUpdateImage, fetching }: Props):JSX.Element {
+
     return (
         <div className="flex flex-col h-40 w-40 bg-cyan-300 rounded-md justify-center mx-auto">
-            <div className="h-5/6 w-full overflow-hidden">
+            <Link to={"/dog_profile"} state={{
+                dogName: dog.name,
+                subBreed: dog.sub_breed,
+                imagePath: dog.imagePath,
+                description: dog.description
+                }} className="h-5/6 w-full overflow-hidden">
                 <img src={dog.imagePath} className='object-cover h-full w-full rounded-md' />
-            </div>
+            </Link>
             <div className="relative">
                 <p className="text-center">
                     {dog.name}
                 </p>
-                <div className="absolute right-2 bottom-1 hover:bg-slate-400 rounded-lg cursor-pointer" onClick={() => fetchAndUpdateImage(dog.name)} >
+                <button disabled={fetching} className="absolute right-2 bottom-1 rounded-lg cursor-pointer" onClick={() => fetchAndUpdateImage(dog.name)} >
                     <RxReload />
-                </div>
+                </button>
             </div>
             {/* {dog.sub_breed.length > 0 ?
                 <div>

@@ -30,15 +30,21 @@ export default function DogsUI():JSX.Element {
     }
 
     async function get() {
-        const data = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
-        if (!data.success) {
-            toast.error(data.description);
+        const { success, description, status, data } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api`);
+
+        if(status === 401){
+            toast.error("Token Expired, Please login again. redirecting...", {
+                onClose: () => {navigator("/Login", {replace: true})}
+            })
+        }
+        if (!success) {
+            toast.error(description);
             toast.error("Redirecting to login page...", {
                 onClose: () => navigator("/Login", {replace: true})
             });
         } else {
-            setDogs(data.data);
-            setFilteredDogs(data.data);
+            setDogs(data);
+            setFilteredDogs(data);
         }
     }
 

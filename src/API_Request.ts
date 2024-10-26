@@ -3,6 +3,7 @@ import axios from "axios"
 type ReturnDataType = {
     success: boolean;
     description: string;
+    status?: number;
     data?: any;
 }
 
@@ -16,13 +17,16 @@ const API_Request = {
 
         let dataToResponse: ReturnDataType = {
             success: false,
-            description: ""
+            description: "",
+            status:400,
         }
 
         try{
             const response = await axios.get(url, {
                 withCredentials: true
             })
+
+            dataToResponse.status = response.status;
 
             const { success, description, data }:ResponseDataType = response.data;
             
@@ -40,13 +44,16 @@ const API_Request = {
 
         let dataToResponse: ReturnDataType = {
             success: false,
-            description: ""
+            description: "",
+            status:400,
         }
 
         try{
             const response = await axios.patch(url, body, {
                 withCredentials: true
             })
+
+            dataToResponse.status = response.status;
 
             const { success, description }:ResponseDataType = response.data;
             
@@ -63,13 +70,16 @@ const API_Request = {
 
         let dataToResponse: ReturnDataType = {
             success: false,
-            description: ""
+            description: "",
+            status:400,
         }
 
         try{
             const response = await axios.post(url, body, {
                 withCredentials: true
             })
+
+            dataToResponse.status = response.status;
 
             const { success, description }:ResponseDataType = response.data;
             
@@ -86,13 +96,16 @@ const API_Request = {
 
         let dataToResponse: ReturnDataType = {
             success: false,
-            description: ""
+            description: "",
+            status:400,
         }
 
         try{
-            const response = await axios.get(url, {
+            const response = await axios.delete(url, {
                 withCredentials: true
             })
+
+            dataToResponse.status = response.status;
 
             const { success, description }:ResponseDataType = response.data;
             

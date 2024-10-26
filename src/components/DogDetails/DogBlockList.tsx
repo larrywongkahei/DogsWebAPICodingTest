@@ -2,6 +2,7 @@ import axios from "axios";
 import API_Request from "../../API_Request";
 import DogBlock from "./DogBlock";
 import { TDog, TSubBreed } from "../../DogType";
+import { useState } from "react";
 
 
 
@@ -12,8 +13,10 @@ type Props = {
 }
 
 export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props):JSX.Element {
+    const [fetching, setFetching] = useState<boolean>(false);
 
     async function fetchAndUpdateImage(dogName: string) {
+        setFetching(true);
         const formattedDogName = dogName.split("-");
         if (formattedDogName.length > 1) {
             const fName = formattedDogName[0];
@@ -41,7 +44,7 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
             } catch (error) {
                 console.log('error show in subbreed')
             }
-            return;
+            
         }
 
         try {
@@ -62,7 +65,7 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
         } catch (error) {
             console.log('error main breed')
         }
-        return;
+        return setFetching(false);
 
     }
 
@@ -71,7 +74,7 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
             {
                 dogs?.slice((pageIndex - 1) * 16, pageIndex * 16).map((each: TDog, index: number) => {
                     return (
-                        <DogBlock dog={each} fetchAndUpdateImage={fetchAndUpdateImage} key={index} />
+                        <DogBlock dog={each} fetchAndUpdateImage={fetchAndUpdateImage} key={index} fetching={fetching}/>
                     )
                 })
             }

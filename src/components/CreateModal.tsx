@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { RxReload } from "react-icons/rx";
 import API_Request from "../API_Request";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     cancel: () => void;
@@ -14,6 +15,7 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
     const [imagePath, setimagePath] = useState<string>('');
     const [fetching, setFetching] = useState<boolean>(false);
     const [verified, setVerified] = useState<boolean>(false);
+    const navigator = useNavigate();
 
     async function handleVerify() {
         if (mainBreed.length === 0) {
@@ -28,7 +30,13 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
             path = `${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}`
         }
 
-        const { success, description, data } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/verify/${path}`);
+        const { success, description, data, status } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/verify/${path}`);
+
+        if(status === 401){
+            toast.error("Token Expired, Please login again. redirecting...", {
+                onClose: () => {navigator("/Login", {replace: true})}
+            })
+        }
 
         if (success) {
             toast.success(description);
