@@ -70,7 +70,7 @@ export default function useDogAPI({ main_breed_name }:{main_breed_name:string}) 
 
     async function Update(dog: TDog) {
 
-        const { success, data, description, status } = await API_Request.PATCH(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/update`, dog);
+        const { success, data, description, status } = await API_Request.PATCH<TDog>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/update`, dog);
 
         if (status === 401) {
             return toast.error("Token Expired, Please login again. redirecting...", {

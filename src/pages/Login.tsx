@@ -11,7 +11,7 @@ export default function Login(): JSX.Element {
 
     async function handleLogin(e:React.FormEvent) {
         e.preventDefault();
-        const { success, description } = await API_Request.POST(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/login`,
+        const { success, description } = await API_Request.POST<{username:string, password:string}>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/account/login`,
             {
                 username: username,
                 password: password,

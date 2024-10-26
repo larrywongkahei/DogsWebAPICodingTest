@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { RxReload } from "react-icons/rx";
 import API_Request from "../API_Request";
 import { useNavigate } from "react-router-dom";
+import { TDog } from "../DogType";
 
 type Props = {
     cancel: () => void;
@@ -88,7 +89,7 @@ export default function CreateModal({ cancel }: Props): JSX.Element {
 
         setFetching(true);
 
-        const { success, description: result_description, status } = await API_Request.POST(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/create`, {
+        const { success, description: result_description, status } = await API_Request.POST<TDog>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/create`, {
             mainBreed:mainBreed.toLowerCase(),
             subBreed: subBreed.toLowerCase(),
             imagePath,

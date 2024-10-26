@@ -24,7 +24,7 @@ export default function DogBlockList({ dogs, updateDogsState, pageIndex }: Props
         const newImagePath = await fetchRandomImage(dogName);
         const data = updateImagePath(dogs, newImagePath, dogName);
         updateDogsState(data.data)
-        const { success, description, status } = await API_Request.PATCH(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/image/${dogName}`, { imagePath: newImagePath });
+        const { success, description, status } = await API_Request.PATCH<{imagePath:string}>(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/image/${dogName}`, { imagePath: newImagePath });
 
         setFetching(false);
 
