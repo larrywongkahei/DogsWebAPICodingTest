@@ -1,13 +1,9 @@
 import { RxReload } from "react-icons/rx";
+import { TDog } from "../../DogType";
 
-type Dog = {
-    name: string;
-    imagePath: string;
-    sub_breed: any;
-}
 
 type Props = {
-    dog: Dog;
+    dog: TDog;
     fetchAndUpdateImage: (name: string) => void
 
 }

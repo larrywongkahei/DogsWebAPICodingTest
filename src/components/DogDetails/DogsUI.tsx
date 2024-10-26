@@ -9,21 +9,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import API_Request from "../../API_Request";
 import CreateModal from "../CreateModal";
 import { useNavigate } from "react-router-dom";
-
-
-type Dog = {
-    name: string;
-    imagePath: string;
-    sub_breed: any;
-}
+import { TDog } from "../../DogType";
 
 export default function DogsUI():JSX.Element {
 
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [filters, setFilters] = useState<string[]>([]);
     const [startWithFilter, setStartWithFilter] = useState<string>("");
-    const [dogs, setDogs] = useState<Dog[]>([]);
-    const [filteredDogs, setFilteredDogs] = useState<Dog[]>([]);
+    const [dogs, setDogs] = useState<TDog[]>([]);
+    const [filteredDogs, setFilteredDogs] = useState<TDog[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const navigator = useNavigate();
 
@@ -70,17 +64,17 @@ export default function DogsUI():JSX.Element {
     function applyFilters(initial: string, filters: string[]) {
         const shadowDogsList = [...dogs];
 
-        let firstLayerFilteredList: Dog[] = [];
+        let firstLayerFilteredList: TDog[] = [];
 
         if (filters.length > 0) {
-            firstLayerFilteredList = shadowDogsList.filter((dog: Dog) => filters.every((filter: string) => dog.name.toLowerCase().includes(filter.toLowerCase())));
+            firstLayerFilteredList = shadowDogsList.filter((dog: TDog) => filters.every((filter: string) => dog.name.toLowerCase().includes(filter.toLowerCase())));
         } else {
             firstLayerFilteredList = [...dogs];
         }
 
         // If StartWithFilter not empty, apply
         if (initial !== "") {
-            const secondLayerFilteredList = firstLayerFilteredList.filter((dog: Dog) => dog.name.toLowerCase().startsWith(initial.toLowerCase()));
+            const secondLayerFilteredList = firstLayerFilteredList.filter((dog: TDog) => dog.name.toLowerCase().startsWith(initial.toLowerCase()));
             setFilteredDogs(secondLayerFilteredList);
             return;
         }

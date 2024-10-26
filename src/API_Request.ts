@@ -31,8 +31,7 @@ const API_Request = {
             dataToResponse.data = data
 
             return dataToResponse;
-        }catch(error:unknown){
-            console.log(error);
+        }catch(error:any){
             dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }
@@ -78,7 +77,7 @@ const API_Request = {
             dataToResponse.description = description;
 
             return dataToResponse;
-        }catch(error:unknown){
+        }catch(error:any){
             dataToResponse.description = error?.response.data?.description;
             return dataToResponse;
         }
@@ -101,7 +100,7 @@ const API_Request = {
             dataToResponse.description = description;
 
             return dataToResponse;
-        }catch(error:unknown){
+        }catch(error:any){
             dataToResponse.description = error.response.data.description;
             return dataToResponse;
         }

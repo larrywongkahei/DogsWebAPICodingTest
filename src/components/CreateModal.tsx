@@ -1,63 +1,70 @@
-import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { RxReload } from "react-icons/rx";
+import API_Request from "../API_Request";
 
 type Props = {
     cancel: () => void;
 }
 
-export default function CreateModal({ cancel }: Props):JSX.Element {
+export default function CreateModal({ cancel }: Props): JSX.Element {
     const [mainBreed, setMainBreed] = useState<string>('');
     const [subBreed, setSubBreed] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [verified, setVerified] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
     const [imagePath, setimagePath] = useState<string>('');
     const [fetching, setFetching] = useState<boolean>(false);
+    const [verified, setVerified] = useState<boolean>(false);
 
     async function handleVerify() {
-        setFetching(true);
-        let url = "";
-        if (subBreed.length < 1) {
-            url = `https://dog.ceo/api/breed/${mainBreed.toLowerCase()}/images/random`
-        } else {
-            url = `https://dog.ceo/api/breed/${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}/images/random`
+        if (mainBreed.length === 0) {
+            return toast.error("Main Breed can not be empty.")
         }
-        try {
-            const { data } = await axios.get(url);
-            const { message } = data;
-            setimagePath(message);
-            toast.success("Successfully verified!");
-            setErrorMessage("");
+        setFetching(true);
+        let path = "";
+
+        if (subBreed.length < 1) {
+            path = `${mainBreed.toLowerCase()}`
+        } else {
+            path = `${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}`
+        }
+
+        const { success, description, data } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/verify/${path}`);
+
+        if (success) {
+            toast.success(description);
             setVerified(true);
-        } catch (error) {
-            toast.error("Failed verification, Please check your input");
+            setimagePath(data);
+        } else {
+            toast.error(description);
         }
         setFetching(false);
+
     }
 
     async function getRandomImage() {
         setFetching(true);
         await toast.promise(
             new Promise(async (resolve, reject) => {
-                let url = "";
+                let path = "";
+
                 if (subBreed.length < 1) {
-                    url = `https://dog.ceo/api/breed/${mainBreed.toLowerCase()}/images/random`
+                    path = `${mainBreed.toLowerCase()}`
                 } else {
-                    url = `https://dog.ceo/api/breed/${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}/images/random`
+                    path = `${mainBreed.toLowerCase()}/${subBreed.toLowerCase()}`
                 }
-                try {
-                    const { data } = await axios.get(url);
-                    const { message } = data;
-                    setimagePath(message);
-                    resolve("success");
-                } catch (error) {
-                    reject(error);
+
+                const { success, data } = await API_Request.GET(`${import.meta.env.VITE_BACKEND_ENDPOINT}/api/verify/${path}`);
+
+                if (success) {
+                    setVerified(true);
+                    setimagePath(data);
+                    setFetching(false);
+                    resolve('Success');
+                } else {
+                    setFetching(false);
+                    reject('Failed')
                 }
-                setFetching(false);
-            }
-            ),
+            }),
             {
                 pending: "Getting random image",
                 success: "Image fetched successfully",
@@ -68,7 +75,7 @@ export default function CreateModal({ cancel }: Props):JSX.Element {
 
     function handleConfirm() {
         if (!verified) {
-            setErrorMessage("Please verify dog breed.");
+            return toast.error("Please verify dog breed.");
         }
         console.log("Confirmed with Main Breed:", mainBreed, "Sub Breed:", subBreed);
         cancel();
@@ -77,7 +84,7 @@ export default function CreateModal({ cancel }: Props):JSX.Element {
     return (
         <>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                <div className={`bg-white rounded-lg shadow-lg overflow-scroll ${(verified && imagePath) ? "w-1/3 h-5/6" : "w-96"} p-6 relative`}>
+                <div className={`bg-white rounded-lg shadow-lg overflow-scroll &::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${(verified && imagePath) ? "w-1/3 h-5/6" : "w-96"} p-6 relative`}>
                     <h2 className="text-2xl font-semibold mb-4">Select Dog Breed</h2>
 
                     <div className="mb-4">
@@ -112,17 +119,10 @@ export default function CreateModal({ cancel }: Props):JSX.Element {
                             rows={5}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
                             placeholder="Enter description"
-                            
+
                         />
                     </div>
 
-                    {!verified &&
-                        <div className="h-12 w-full">
-                            <p className="text-red-500 text-lg font-mono text-center">
-                                {errorMessage}
-                            </p>
-                        </div>
-                    }
                     {(verified && imagePath) &&
                         <div className="my-6">
                             <label className="block text-gray-700 mb-2 text-center">Image</label>
