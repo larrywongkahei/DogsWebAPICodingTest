@@ -1,0 +1,23 @@
+services:
+  dogs_api_frontend:
+    build: ./dogs_api
+    ports: 
+      - "80:5173"
+    environment:
+      - VITE_BACKEND_ENDPOINT=http://localhost:8080
+
+  dogs_api_backend:
+    build: ./dogs_api_backend
+    environment:
+      - PORTS=8080
+      - JWT_SECRET_KEY=SecretWord
+      - TOKEN_EXPIRE_TIME_INT=900000
+      - TOKEN_EXPIRE_TIME_SHORT=30m
+      - FRONTEND_ORIGIN=http://localhost
+    ports:
+      - "8080:8080"
+    volumes:
+      - data:/app/data
+volumes:
+  data: 
+    external: true
