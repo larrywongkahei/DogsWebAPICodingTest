@@ -1,13 +1,13 @@
 services:
   dogs_api_frontend:
-    build: ./dogs_api
+    build: ./DogsWebAPICodingTest
     ports: 
       - "80:5173"
     environment:
       - VITE_BACKEND_ENDPOINT=http://localhost:8080
 
   dogs_api_backend:
-    build: ./dogs_api_backend
+    build: ./DogsWebAPICodingTest_Backend
     environment:
       - PORTS=8080
       - JWT_SECRET_KEY=SecretWord
